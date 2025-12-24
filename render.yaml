@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: churn-prediction
+    env: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn churn_project.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        scope: run
+        value: ${DJANGO_SECRET_KEY}
+      - key: DJANGO_DEBUG
+        scope: run
+        value: false
+      - key: DJANGO_ALLOWED_HOSTS
+        scope: run
+        value: ${RENDER_EXTERNAL_HOSTNAME}
+      - key: SECURE_SSL_REDIRECT
+        scope: run
+        value: true
