@@ -56,7 +56,7 @@ This project predicts which customers are likely to churn using **Logistic Regre
 **Key Insight:**  
 - Recall for churn = 0.75 → 75% of churners caught ✅  
 - Precision = 0.52 → acceptable false alarms (trade-off for recall)  
-- Accuracy = 74–75% → secondary metric due to class imbalance  
+- Accuracy = 75–85% → secondary metric due to class imbalance  
 
 ---
 
