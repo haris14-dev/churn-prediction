@@ -40,7 +40,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-c(-0r=h5mf5x(2
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 # Allow hosts to be set via environment variable (comma-separated), falling back to sensible defaults
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com').split(',')]
+# Include Render's environment hostname
+render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
+default_hosts = f'localhost,127.0.0.1,*.onrender.com,{render_hostname}' if render_hostname else 'localhost,127.0.0.1,*.onrender.com'
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', default_hosts).split(',') if host.strip()]
 
 # In production ensure a secret key is set
 if not DEBUG and not os.environ.get('DJANGO_SECRET_KEY'):
@@ -141,8 +144,8 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Production security settings (can be toggled via environment variables)
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = os.getenv('SESSION_COOKIE_SECURE', 'False') == 'True'
+CSRF_COOKIE_SECURE = os.getenv('CSRF_COOKIE_SECURE', 'False') == 'True'
 SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False') == 'True'
 SECURE_HSTS_SECONDS = int(os.getenv('SECURE_HSTS_SECONDS', '0'))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv('SECURE_HSTS_INCLUDE_SUBDOMAINS', 'False') == 'True'
