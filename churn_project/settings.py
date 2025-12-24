@@ -40,7 +40,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-c(-0r=h5mf5x(2
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 # Allow hosts to be set via environment variable (comma-separated), falling back to sensible defaults
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'churn_predictor.com,localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,*.onrender.com').split(',')
 
 # In production ensure a secret key is set
 if not DEBUG and not os.environ.get('DJANGO_SECRET_KEY'):
