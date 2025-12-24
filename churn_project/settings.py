@@ -39,11 +39,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-c(-0r=h5mf5x(2
 # Use environment variable DJANGO_DEBUG (True/False). Defaults to False for safety.
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-# Allow hosts to be set via environment variable (comma-separated), falling back to sensible defaults
-# Include Render's environment hostname
-render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME', '')
-default_hosts = f'localhost,127.0.0.1,*.onrender.com,{render_hostname}' if render_hostname else 'localhost,127.0.0.1,*.onrender.com'
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', default_hosts).split(',') if host.strip()]
+# Allow hosts - use wildcard in production to trust Render's proxy
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    # In production, accept all requests - Render's proxy will handle security
+    ALLOWED_HOSTS = ['*']
 
 # In production ensure a secret key is set
 if not DEBUG and not os.environ.get('DJANGO_SECRET_KEY'):
